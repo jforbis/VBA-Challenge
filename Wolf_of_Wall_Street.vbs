@@ -1,16 +1,16 @@
-Sub stocks()
+Sub WolfOfWallStreet()
 
 ' Declaring variables
 Dim i As Long
 Dim ticker As String
 Dim yearlyChange As Double
-Dim percentChange as Double
-Dim volume As Long
-Dim rangeCount as Long
+Dim percentChange As Double
+Dim volume As Double
+Dim rangeCount As Long
 Dim lastrow As Long
 Dim dataTable As Long
 
-lastrow = Cells(Rows.Count, "A").End(xlUp).Row
+lastrow = Cells(Rows.count, "A").End(xlUp).Row
 
 ' Creating headers for new data table
 dataTable = 2
@@ -24,8 +24,11 @@ Cells(1, 12).Value = "Total Stock Volume"
  'Loop through all stock data on ONE sheet
  For i = 2 To lastrow
     ' Setting up a Counter to be used to count length of ticker range
-    If Cells(i,1).value = Cells(i+1,1) Then
+    If Cells(i, 1).Value = Cells(i + 1, 1) Then
         rangeCount = rangeCount + 1
+
+        'Stock Volume total per ticker range
+        volume = volume + Cells(i, 7).Value
         
     ElseIf Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
         'List out each Ticker type
@@ -33,24 +36,39 @@ Cells(1, 12).Value = "Total Stock Volume"
         Range("I" & dataTable).Value = ticker
 
         'Variables for start and end of ticker range
-        start = cells(i-rangeCount,3).value
-        last = cells(i,6).value       
+        Start = Cells(i - rangeCount, 3).Value
+        last = Cells(i, 6).Value
         
-        'List out yearly change from open to close 
-        yearlyChange = last-start
-        Range("J" & dataTable).Value = yearlyChange 
+        'List out yearly change from open to close
+        yearlyChange = last - Start
+        Range("J" & dataTable).Value = yearlyChange
       
         'List out percent change from open to close
-        percentChange = yearlyChange/last
-        Range("K" & dataTable).value = FormatPercent(percentChange)
+        percentChange = yearlyChange / last
+        Range("K" & dataTable).Value = FormatPercent(percentChange)
     
         'Sum total stock volume per ticker
-        volume = volume + Cells(i,7).value
-        Range("L" & dataTable).value = volume
+        volume = volume + Cells(i, 7).Value
+        Range("L" & dataTable).Value = volume
 
+        'Reset values
         rangeCount = 0
+        volume = 0
 
         dataTable = dataTable + 1
+
+    End If
+    
+    ' Conditional to change cell color for positive or negative change
+    If Cells(i,10).value > 0 Then
+
+        ' Color Code
+        Cells(i,10).Interior.ColorIndex = 4
+
+    ElseIF Cells(i,10).value < 0 Then
+
+        ' Color Code
+        Cells(i,10).Interior.ColorIndex = 3
 
     End If
 
