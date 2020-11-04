@@ -9,8 +9,10 @@ Dim volume As Double
 Dim rangeCount As Long
 Dim lastrow As Long
 Dim dataTable As Long
+Dim lastDataTableRow As Long
 
 lastrow = Cells(Rows.count, "A").End(xlUp).Row
+lastDataTableRow = Cells(Rows.count, "J").End(xlUp).Row
 
 ' Creating headers for new data table
 dataTable = 2
@@ -41,8 +43,9 @@ Cells(1, 12).Value = "Total Stock Volume"
         
         'List out yearly change from open to close
         yearlyChange = last - Start
+
         Range("J" & dataTable).Value = yearlyChange
-      
+
         'List out percent change from open to close
         percentChange = yearlyChange / last
         Range("K" & dataTable).Value = FormatPercent(percentChange)
@@ -57,21 +60,18 @@ Cells(1, 12).Value = "Total Stock Volume"
 
         dataTable = dataTable + 1
 
-    End If
-    
+    End if
+
     ' Conditional to change cell color for positive or negative change
-    If Cells(i,10).value > 0 Then
-
+    IF yearlyChange > 0 Then   
         ' Color Code
-        Cells(i,10).Interior.ColorIndex = 4
+        Cells(10, i).Interior.ColorIndex = 4
 
-    ElseIF Cells(i,10).value < 0 Then
-
+    Else 
         ' Color Code
-        Cells(i,10).Interior.ColorIndex = 3
+        Cells(10, i).Interior.ColorIndex = 3
 
-    End If
-
+    End If  
 Next i
 
 End Sub
