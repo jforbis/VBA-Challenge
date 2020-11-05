@@ -1,7 +1,8 @@
-Sub WolfOfWallStreet()
+Sub WolfOfWallStreetSequel()
 
 ' Declaring variables
 Dim i As Long
+Dim a as Long
 Dim ticker As String
 Dim last As Double
 Dim yearlyChange As Double
@@ -18,7 +19,6 @@ For Each ws In Worksheets
 
 'Finding last row for main table and 2nd data table that is created.
 lastrow = ws.Cells(Rows.count, "A").End(xlUp).Row
-lastDataTableRow = ws.Cells(Rows.count, "J").End(xlUp).Row
 
 ' Creating headers for new data table
 dataTable = 2
@@ -45,18 +45,19 @@ ws.Cells(1, 12).Value = "Total Stock Volume"
         start = ws.Cells(i - rangeCount, 3).Value
         last = ws.Cells(i, 6).Value
 
-        ws.Range("J" & dataTable).Value = yearlyChange
-
         If start <> 0 Then
-        'List out percent change from open to close
-        percentChange = yearlyChange / last
         'List out yearly change from open to close
         yearlyChange = last - start
+        'List out percent change from open to close
+        percentChange = yearlyChange / last
         Else
         percentChange = 0
         yearlyChange = 0
         End If
         
+        ws.Range("J" & dataTable).Value = yearlyChange
+
+
         ws.Range("K" & dataTable).Value = FormatPercent(percentChange, 2)
     
         'Sum total stock volume per ticker
@@ -73,16 +74,21 @@ ws.Cells(1, 12).Value = "Total Stock Volume"
 
 Next i
 
-' Conditional to change cell color for positive or negative change
-If yearlyChange > 0 Then
-    ' Color Code
-    ws.Range("J2:J" & lastDataTableRow).Interior.ColorIndex = 4
+lastDataTableRow = ws.Cells(Rows.count, "J").End(xlUp).Row
 
-ElseIf yearlyChange < 0 Then
-    ' Color Code
-    ws.Range("J2:J" & lastDataTableRow).Interior.ColorIndex = 3
+for a = 2 to lastDataTableRow
+    ' Conditional to change cell color for positive or negative change
+    If ws.Cells(a,10).value > 0 Then
+        ' Color Code
+        ws.Cells(a,10).Interior.ColorIndex = 4
 
-End If
+    ElseIf ws.Cells(a,10).value < 0 Then
+        ' Color Code
+        ws.Cells(a,10).Interior.ColorIndex = 3
+
+    End If
+
+Next a
 
 ' Go to next worksheet
 Next ws

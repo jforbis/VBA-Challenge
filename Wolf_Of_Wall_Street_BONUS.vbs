@@ -7,6 +7,8 @@ dim largestTV as Double
 dim lastrow as Long
 dim dataRange as Range
 dim i as Integer
+dim x as Integer
+dim y as Integer
 dim ws as Worksheet
 
 For Each ws In Worksheets
@@ -32,24 +34,24 @@ ws.Cells(4,15).value = "Greatest Total Value"
 
 ws.Cells(2,17).value = FormatPercent(largestIncrease,2)
 for i = 2 to lastrow
-    If ws.Range("J" & i).value = largestIncrease Then
-    ws.Cells(2,16).value = ws.Range("J" & i).offset(0,-1)
+    If (ws.Range("J" & i).value)/100 = largestIncrease Then
+    ws.Cells(2,16).value = ws.Range("I" & i)
     End If
 next i
 
 ws.Cells(3,17).value = FormatPercent(largestDecrease,2)
-for i = 2 to lastrow
-    If ws.Range("J" & i).value = largestDecrease Then
-    ws.Cells(3,16).value = ws.Range("J" & i).offset(0,-1)
+for x = 2 to lastrow
+    If (ws.Range("J" & x).value)/100 = largestDecrease Then
+    ws.Cells(3,16).value = ws.Range("I" & x)
     End If
-next i
+next x
 
 ws.Cells(4,17).value = largestTV
-for i = 2 to lastrow
-    If ws.Range("L" & i).value = largestTV Then
-    ws.Cells(4,16).value = ws.Range("L" & i).offset(0,-3)
+for y = 2 to lastrow
+    If ws.Range("L" & y).value = largestTV Then
+    ws.Cells(4,16).value = ws.Range("L" & y).offset(0,-3)
     End If
-next i
+next y
 
 Next ws
 
